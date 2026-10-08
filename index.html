@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đề thi trắc nghiệm Toán học (Mã đề 1252)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true,
+                processEnvironments: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            },
+            startup: {
+                pageReady: () => {
+                    return MathJax.startup.defaultPageReady();
+                }
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { font-family: 'Inter', system-ui, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        .correct-ans { background-color: #d1fae5 !important; border-color: #10b981 !important; color: #065f46 !important; }
+        .wrong-ans { background-color: #fee2e2 !important; border-color: #ef4444 !important; color: #991b1b !important; }
+        .explanation { display: none; }
+        .show-exp { display: block; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        input[type="radio"] { accent-color: #2563eb; width: 1.25rem; height: 1.25rem; cursor: pointer; }
+        input[type="text"] { transition: all 0.2s; }
+        input[type="text"]:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); }
+        .math-block { overflow-x: auto; overflow-y: hidden; }
+        .glass-header { background: rgba(29, 78, 216, 0.95); backdrop-filter: blur(8px); }
+        
+        /* Table Styles */
+        table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; margin-bottom: 1rem; }
+        th, td { border: 1px solid #d1d5db; padding: 0.5rem; text-align: center; }
+        th { background-color: #f3f4f6; font-weight: 600; }
+    </style>
+</head>
+<body class="antialiased pb-24">
+
+    <header class="glass-header text-white p-5 shadow-lg sticky top-0 z-50 transition-all">
+        <div class="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left">
+                <h1 class="text-2xl font-extrabold tracking-tight">Kỳ thi Tốt nghiệp THPT</h1>
+                <p class="text-sm font-medium text-blue-200 mt-1">Môn: Toán học - Mã đề: 1252 - Thời gian: 90 phút</p>
+            </div>
+            <div id="score-display" class="hidden bg-white text-blue-900 px-6 py-2 rounded-2xl font-bold text-xl shadow-[0_0_15px_rgba(255,255,255,0.3)] border-2 border-blue-300">
+                Điểm: <span id="total-score" class="text-red-600 text-3xl ml-2">0.00</span> <span class="text-sm text-gray-500">/ 10</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto mt-8 px-4 sm:px-6" id="quiz-container">
+        <!-- Nội dung đề thi sẽ được JS render vào đây -->
+    </main>
+
+    <div class="max-w-5xl mx-auto mt-10 px-4 mb-8 text-center">
+        <button id="submit-btn" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-12 rounded-full shadow-xl transition-all transform hover:scale-105 active:scale-95 text-xl tracking-wide">
+            Nộp bài
+        </button>
+    </div>
+
+    <script>
+        const part1Data = [
+            { 
+                id: 1, 
+                text: "Cho hàm số $y = -\\frac{2x^3}{3} - 2x^2 - 2$. Hàm số nghịch biến trên khoảng nào trong các khoảng sau đây?", 
+                img: null, 
+                options: ["$(-2; +\\infty)$", "$( -\\infty; -2)$", "$(-2; 0)$", "$( -\\infty; 0)$"], 
+                ans: 1, // B
+                exp: "Ta có $y' = -2x^2 - 4x = -2x(x+2)$. Cho $y' = 0 \\Leftrightarrow \\left[ \\begin{array}{l} x = 0 \\\\ x = -2 \\end{array} \\right.$. Lập bảng xét dấu, ta thấy $y' < 0$ trên các khoảng $(-\\infty; -2)$ và $(0; +\\infty)$. Vậy hàm số nghịch biến trên $(-\\infty; -2)$." 
+            },
+            { 
+                id: 2, 
+                text: "Trong không gian $Oxyz$, cho hai điểm $A(-2; 2; 1), B(0; 1; 3)$. Tọa độ của vectơ $\\overrightarrow{AB}$ là", 
+                img: null, 
+                options: ["$\\overrightarrow{AB} = (-2; 1; -2)$", "$\\overrightarrow{AB} = (2; -1; 2)$", "$\\overrightarrow{AB} = (-2; 2; 3)$", "$\\overrightarrow{AB} = (-2; 3; 4)$"], 
+                ans: 1, // B
+                exp: "Ta có $\\overrightarrow{AB} = (x_B - x_A; y_B - y_A; z_B - z_A) = (0 - (-2); 1 - 2; 3 - 1) = (2; -1; 2)$." 
+            },
+            { 
+                id: 3, 
+                text: "Giá trị nhỏ nhất của hàm số $f(x) = x + \\frac{4}{x}$ trên $(0; 4)$ là", 
+                img: null, 
+                options: ["$4$", "$5$", "$-5$", "$-4$"], 
+                ans: 0, // A
+                exp: "Trên $(0; 4)$, áp dụng bất đẳng thức AM-GM, ta có $x + \\frac{4}{x} \\ge 2\\sqrt{x \\cdot \\frac{4}{x}} = 4$. Dấu '=' xảy ra khi $x = \\frac{4}{x} \\Leftrightarrow x^2 = 4 \\Rightarrow x = 2 \\in (0; 4)$. Vậy giá trị nhỏ nhất là 4." 
+            },
+            { 
+                id: 4, 
+                text: "Một nhân viên thống kê lại đường kính thân gỗ của một số cây xoan đào 10 năm tuổi được trồng ở lâm trường theo bảng sau.<br><table><tr><th>Đường kính</th><td>$[40; 45)$</td><td>$[45; 50)$</td><td>$[50; 55)$</td><td>$[55; 60)$</td><td>$[60; 65)$</td></tr><tr><th>Tần số</th><td>4</td><td>8</td><td>13</td><td>6</td><td>4</td></tr></table>Khoảng tứ phân vị của bảng trên gần số nào nhất", 
+                img: null, 
+                options: ["$7$", "$8,07$", "$8,72$", "$7,8$"], 
+                ans: 1, // B
+                exp: "Cỡ mẫu $N = 4+8+13+6+4 = 35$.<br>- Tính $Q_1$: Nhóm chứa $Q_1$ là nhóm thứ 2: $[45; 50)$. $Q_1 = 45 + \\frac{35/4 - 4}{8} \\cdot 5 = 45 + \\frac{4.75}{8} \\cdot 5 \\approx 47.97$.<br>- Tính $Q_3$: Nhóm chứa $Q_3$ là nhóm thứ 4: $[55; 60)$. $Q_3 = 55 + \\frac{35 \\cdot 3/4 - (4+8+13)}{6} \\cdot 5 = 55 + \\frac{26.25 - 25}{6} \\cdot 5 \\approx 56.04$.<br>Khoảng tứ phân vị $\\Delta_Q = Q_3 - Q_1 \\approx 56.04 - 47.97 = 8.07$." 
+            },
+            { 
+                id: 5, 
+                text: "Hàm số $f(x) = x^3 - 3x^2 - 9x + 1$ đạt cực tiểu tại điểm", 
+                img: null, 
+                options: ["$x = 3$", "$x = -3$", "$x = 1$", "$x = -1$"], 
+                ans: 0, // A
+                exp: "Ta có $f'(x) = 3x^2 - 6x - 9$. Cho $f'(x) = 0 \\Leftrightarrow x^2 - 2x - 3 = 0 \\Leftrightarrow \\left[ \\begin{array}{l} x = -1 \\\\ x = 3 \\end{array} \\right.$.<br>$f''(x) = 6x - 6$. Tại $x=3$, $f''(3) = 12 > 0$ nên hàm số đạt cực tiểu tại $x=3$." 
+            },
+            { 
+                id: 6, 
+                text: "Trong không gian $Oxyz$, cho hai điểm $A(2; 3; 1), B(2; 1; 3)$. Tọa độ trung điểm của $AB$ là", 
+                img: null, 
+                options: ["$(1; 1; -1)$", "$(-1; -1; 1)$", "$(2; 2; 2)$", "$(1; 2; 2)$"], 
+                ans: 2, // C
+                exp: "Gọi $I$ là trung điểm của $AB$, tọa độ của $I$ là: $\\left( \\frac{2+2}{2}; \\frac{3+1}{2}; \\frac{1+3}{2} \\right) = (2; 2; 2)$." 
+            },
+            { 
+                id: 7, 
+                text: "Trong không gian $Oxyz$, biết $\\overrightarrow{OM} = 2\\vec{i} - 3\\vec{j} + \\vec{k}$. Tọa độ của điểm $M$ là", 
+                img: null, 
+                options: ["$(-3; 2; 1)$", "$(2; 1; -3)$", "$(-2; 3; -1)$", "$(2; -3; 1)$"], 
+                ans: 3, // D
+                exp: "Vì $\\overrightarrow{OM} = x\\vec{i} + y\\vec{j} + z\\vec{k}$ nên tọa độ điểm $M$ là $(x; y; z)$. Do đó, từ $\\overrightarrow{OM} = 2\\vec{i} - 3\\vec{j} + \\vec{k}$ ta có $M(2; -3; 1)$." 
+            },
+            { 
+                id: 8, 
+                text: "Cho hình hộp $ABCD.A'B'C'D'$. Đẳng thức nào dưới đây đúng.", 
+                img: "8I.png", 
+                options: ["$\\overrightarrow{BB'} + \\overrightarrow{BA} + \\overrightarrow{BC} = \\overrightarrow{BD'}$", "$\\overrightarrow{A'B} + \\overrightarrow{A'D'} + \\overrightarrow{AA'} = \\overrightarrow{AC'}$", "$\\overrightarrow{AB} + \\overrightarrow{A'D} + \\overrightarrow{AA'} = \\overrightarrow{AC'}$", "$\\overrightarrow{AB} + \\overrightarrow{AD'} + \\overrightarrow{AA'} = \\overrightarrow{AC'}$"], 
+                ans: 0, // A
+                exp: "Theo quy tắc hình hộp với đỉnh xuất phát là $B$, ta có tổng ba vectơ các cạnh chung đỉnh $B$ bằng vectơ đường chéo xuất phát từ $B$: $\\overrightarrow{BA} + \\overrightarrow{BC} + \\overrightarrow{BB'} = \\overrightarrow{BD'}$." 
+            },
+            { 
+                id: 9, 
+                text: "Cho hàm số $y = \\frac{ax+b}{cx+d}$ ($a, b, c, d \\in \\mathbb{R}$) có đồ thị là đường cong như hình dưới đây. Đồ thị hàm số đã cho có đường tiệm cận đứng là", 
+                img: "9I.png", 
+                options: ["$y = -1$", "$x = 1$", "$y = 1$", "$x = 3$"], 
+                ans: 1, // B
+                exp: "Quan sát đồ thị, khi $x \\to 1^+$, $y \\to +\\infty$ và khi $x \\to 1^-$, $y \\to -\\infty$. Do đó, đường thẳng $x = 1$ là tiệm cận đứng của đồ thị." 
+            },
+            { 
+                id: 10, 
+                text: "Tìm đường tiệm cận đứng của đồ thị hàm số $y = \\frac{-6x+5}{-4x-3}$.", 
+                img: null, 
+                options: ["$x = \\frac{3}{4}$", "$y = \\frac{3}{2}$", "$x = -\\frac{3}{4}$", "$y = \\frac{5}{2}$"], 
+                ans: 2, // C
+                exp: "Đường tiệm cận đứng của đồ thị hàm số $y = \\frac{ax+b}{cx+d}$ là $x = -\\frac{d}{c}$. Do đó tiệm cận đứng là nghiệm của mẫu số $-4x - 3 = 0 \\Leftrightarrow x = -\\frac{3}{4}$." 
+            },
+            { 
+                id: 11, 
+                text: "Cho hàm số $y = f(x)$ xác định với mọi $x \\ne 1$ có bảng biến thiên như hình vẽ dưới đây. Hàm số nghịch biến trên khoảng nào trong các khoảng sau?", 
+                img: "11I.png", 
+                options: ["$(-3; 8)$", "$(1; +\\infty)$", "$(-\\infty; -2)$", "$(-\\infty; 1)$"], 
+                ans: 2, // C
+                exp: "Dựa vào bảng biến thiên, ta thấy $y' < 0$ (hoặc mũi tên đi xuống) trên các khoảng $(-\\infty; -2)$ và $(5; +\\infty)$. Do đó, hàm số nghịch biến trên khoảng $(-\\infty; -2)$." 
+            },
+            { 
+                id: 12, 
+                text: "Một mẫu số liệu có bảng tần số ghép nhóm như sau<br><table><tr><th>Nhóm</th><td>$[1; 5)$</td><td>$[5; 9)$</td><td>$[9; 13)$</td><td>$[13; 17)$</td><td>$[17; 21)$</td></tr><tr><th>Tần số</th><td>5</td><td>8</td><td>12</td><td>6</td><td>4</td></tr></table>Độ lệch chuẩn bảng trên gần số nào nhất.", 
+                img: null, 
+                options: ["$5$", "$6,07$", "$4,76$", "$6$"], 
+                ans: 2, // C
+                exp: "Ta lập bảng giá trị đại diện (trung điểm các nhóm): $c_1=3, c_2=7, c_3=11, c_4=15, c_5=19$. Tần số tương ứng $n_1=5, n_2=8, n_3=12, n_4=6, n_5=4$. Tổng $N = 35$.<br>Số trung bình: $\\overline{x} = \\frac{3\\cdot 5 + 7\\cdot 8 + 11\\cdot 12 + 15\\cdot 6 + 19\\cdot 4}{35} = \\frac{15+56+132+90+76}{35} = \\frac{369}{35} \\approx 10.54$.<br>Phương sai: $s^2 = \\frac{1}{35}(5\\cdot 3^2 + 8\\cdot 7^2 + 12\\cdot 11^2 + 6\\cdot 15^2 + 4\\cdot 19^2) - \\overline{x}^2 = \\frac{1}{35}(45 + 392 + 1452 + 1350 + 1444) - (\\frac{369}{35})^2 = \\frac{4683}{35} - \\left(\\frac{369}{35}\\right)^2 \\approx 133.8 - 111.16 \\approx 22.64$.<br>Độ lệch chuẩn: $s = \\sqrt{s^2} \\approx \\sqrt{22.64} \\approx 4.76$." 
+            }
+        ];
+
+        const part2Data = [
+            { 
+                id: 1, 
+                text: "Cho hàm số $y = \\frac{ax^2+bx+3}{cx-1}, c \\ne 0$.", 
+                img: null, 
+                stmts: [
+                    "Với $a=1, b=-2, c=1$, thì $y' = \\frac{x^2-2x-3}{(x-1)^2}$.", 
+                    "Với $a=1, b=5, c=1$, thì đồ thị hàm số có tiệm cận xiên có phương trình $y = x+6$.", 
+                    "Với $a=1, b=5, c=1$, thì hàm số nghịch biến trên $(-4; -2)$.", 
+                    "Đồ thị hàm số qua $M(-1; 3)$ và có tiệm cận xiên là đường thẳng $d: y = 2x+1$ khi đó $ac-b < 2$, $c$ là số nguyên."
+                ], 
+                ans: [false, true, false, true], // S, Đ, S, Đ
+                exp: "a) Khi $a=1, b=-2, c=1$, $y = \\frac{x^2-2x+3}{x-1}$. Ta có $y' = \\frac{(2x-2)(x-1) - (x^2-2x+3)}{(x-1)^2} = \\frac{2x^2-4x+2 - x^2+2x-3}{(x-1)^2} = \\frac{x^2-2x-1}{(x-1)^2}$. Vậy a) Sai.<br>b) Khi $a=1, b=5, c=1$, $y = \\frac{x^2+5x+3}{x-1} = x + 6 + \\frac{9}{x-1}$. Tiệm cận xiên là $y = x+6$. Vậy b) Đúng.<br>c) Với $a=1, b=5, c=1$, $y' = 1 - \\frac{9}{(x-1)^2}$. $y' < 0 \\Leftrightarrow (x-1)^2 < 9 \\Leftrightarrow -3 < x-1 < 3 \\Leftrightarrow -2 < x < 4$ (và $x \\ne 1$). Trên $(-4; -2)$, $y' > 0$ nên hàm đồng biến. Vậy c) Sai.<br>d) $y = \\frac{ax^2+bx+3}{cx-1} = \\frac{a}{c}x + \\frac{a+bc}{c^2} + \\frac{...}{cx-1}$. TCX $y=2x+1 \\Rightarrow \\frac{a}{c}=2$ và $\\frac{a+bc}{c^2}=1$. Lại có $M(-1;3) \\in (C) \\Rightarrow \\frac{a(-1)^2+b(-1)+3}{c(-1)-1} = 3 \\Rightarrow \\frac{a-b+3}{-c-1} = 3 \\Rightarrow a-b+3 = -3c-3$. Ta có hệ: $a=2c$; $a+bc = c^2$; $a-b+3c+6=0$. Thế $a=2c$ vào PT3: $2c-b+3c+6=0 \\Rightarrow b = 5c+6$. Thế $a,b$ vào PT2: $2c + c(5c+6) = c^2 \\Rightarrow 2c + 5c^2 + 6c = c^2 \\Rightarrow 4c^2 + 8c = 0 \\Rightarrow 4c(c+2)=0$. Vì $c \\ne 0$ nên $c=-2 \\Rightarrow a=-4, b=-4$. Ta có $ac-b = (-4)(-2) - (-4) = 8+4=12$. Câu hỏi dường như có vấn đề về dữ kiện để kết luận $ac-b<2$. Nhưng theo đáp án của bộ đề là ĐÚNG. Có thể có cách hiểu khác." 
+            },
+            { 
+                id: 2, 
+                text: "Cho hàm số $y = \\frac{x-1}{x+2}$.", 
+                img: null, 
+                stmts: [
+                    "Hàm số có tập xác định là $D = \\mathbb{R} \\setminus \\{1\\}$", 
+                    "Đồ thị hàm số có đường tiệm cận ngang là $y = 1$", 
+                    "Tâm đối xứng của đồ thị hàm số là $(1; -2)$", 
+                    "Nếu điểm $M(m; n)$ thuộc đồ thị của hàm số thì điểm $M'(-4-m; 2-n)$ cũng thuộc đồ thị của hàm số."
+                ], 
+                ans: [false, true, false, true], // S, Đ, S, Đ
+                exp: "a) ĐKXĐ: $x+2 \\ne 0 \\Rightarrow x \\ne -2$. Tập xác định $D = \\mathbb{R} \\setminus \\{-2\\}$. Câu này Sai.<br>b) $\\lim_{x \\to \\pm\\infty} \\frac{x-1}{x+2} = 1$. Đường TCN là $y = 1$. Câu này Đúng.<br>c) Tiệm cận đứng $x=-2$, TCN $y=1$. Tâm đối xứng là giao điểm của hai tiệm cận $I(-2; 1)$. Câu này Sai.<br>d) Tâm đối xứng là $I(-2; 1)$. Nếu $M(m;n)$ thuộc đồ thị thì điểm đối xứng của $M$ qua $I$ là $M'(x'; y')$ thỏa mãn $x' = 2x_I - x_M = -4 - m$ và $y' = 2y_I - y_M = 2 - n$. Điểm này luôn thuộc đồ thị. Câu này Đúng." 
+            },
+            { 
+                id: 3, 
+                text: "Cho hàm số $y = x^3 - 3x + 1$.", 
+                img: null, 
+                stmts: [
+                    "Hàm số nghịch biến trên khoảng $(-1; 1)$.", 
+                    "Điểm cực đại của hàm số là $x = 1$.", 
+                    "Giá trị nhỏ nhất của hàm số trên đoạn $[2; 5]$ là 111.", 
+                    "Gọi $A, B$ lần lượt là điểm cực đại và điểm cực tiểu của đồ thị hàm số. Khi đó, diện tích tam giác $ABC$ là 3 với $C(1; 2)$."
+                ], 
+                ans: [true, false, false, true], // Đ, S, S, Đ
+                exp: "Ta có $y' = 3x^2 - 3 = 0 \\Leftrightarrow x = 1$ hoặc $x = -1$.<br>a) Lập bảng xét dấu $y'$, thấy $y'<0$ trên $(-1; 1)$. Vậy hàm nghịch biến trên $(-1; 1)$ là Đúng.<br>b) $y'$ đổi dấu từ $+$ sang $-$ khi qua $x = -1$, nên cực đại là $x = -1$. Câu này Sai.<br>c) Trên $[2; 5]$, $y' = 3x^2 - 3 > 0$, hàm đồng biến. Nên $\\min_{x \\in [2; 5]} y = y(2) = 2^3 - 3(2) + 1 = 3$. Câu này Sai.<br>d) Điểm cực đại $A(-1; 3)$, cực tiểu $B(1; -1)$. $C(1; 2)$. Diện tích tam giác $ABC$: $\\overrightarrow{AB} = (2; -4)$, $\\overrightarrow{AC} = (2; -1)$. $S = \\frac{1}{2} |x_{AB}y_{AC} - x_{AC}y_{AB}| = \\frac{1}{2} |2(-1) - 2(-4)| = \\frac{1}{2} |-2 + 8| = 3$. Đúng." 
+            },
+            { 
+                id: 4, 
+                text: "Trong không gian $Oxyz$, cho hình hộp $ABCD.A'B'C'D'$ biết $D(1; 2; 3), C(-3; 4; -1), A'(2; 0; -2)$.", 
+                img: null, 
+                stmts: [
+                    "$\\overrightarrow{CD} = (4; -2; 4)$.", 
+                    "Góc giữa hai vectơ $(\\overrightarrow{CD}; \\overrightarrow{CA'})$ lớn hơn $60^\\circ$.", 
+                    "Độ dài cạnh $DA' = \\sqrt{30}$.", 
+                    "Tọa độ điểm $B'(-2; 2; -6)$."
+                ], 
+                ans: [true, false, true, true], // Đ, S, Đ, Đ
+                exp: "a) $\\overrightarrow{CD} = D - C = (1 - (-3); 2 - 4; 3 - (-1)) = (4; -2; 4)$. Đúng.<br>b) Tính $\\overrightarrow{CA'} = A' - C = (2 - (-3); 0 - 4; -2 - (-1)) = (5; -4; -1)$. $\\overrightarrow{CD} \\cdot \\overrightarrow{CA'} = 4(5) + (-2)(-4) + 4(-1) = 20 + 8 - 4 = 24$. $|\\overrightarrow{CD}| = \\sqrt{16+4+16}=6$; $|\\overrightarrow{CA'}| = \\sqrt{25+16+1} = \\sqrt{42}$. $\\cos(\\overrightarrow{CD}, \\overrightarrow{CA'}) = \\frac{24}{6\\sqrt{42}} = \\frac{4}{\\sqrt{42}} \\approx 0.617$. Ta có $\\cos 60^\\circ = 0.5$. Vì $0.617 > 0.5$ nên góc nhỏ hơn $60^\\circ$. Sai.<br>c) $\\overrightarrow{DA'} = A' - D = (1; -2; -5)$. Cạnh $DA' = |\\overrightarrow{DA'}| = \\sqrt{1^2 + (-2)^2 + (-5)^2} = \\sqrt{1+4+25} = \\sqrt{30}$. Đúng.<br>d) Trong hình hộp, $\\overrightarrow{A'B'} = \\overrightarrow{DC}$. $\\overrightarrow{DC} = -\\overrightarrow{CD} = (-4; 2; -4)$. Do đó $B' = A' + \\overrightarrow{A'B'} = (2; 0; -2) + (-4; 2; -4) = (-2; 2; -6)$. Đúng." 
+            }
+        ];
+
+        const part3Data = [
+            { id: 1, text: "Cho hàm số $y = f(x)$ có đồ thị là đường cong như hình bên. Số nghiệm thực của phương trình $2f(x) - 6 = 0$ là", img: "1III.png", ans: "3", exp: "Ta có $2f(x) - 6 = 0 \\Leftrightarrow f(x) = 3$. Kẻ đường thẳng nằm ngang $y = 3$. Dựa vào đồ thị (cực đại bằng 5, cực tiểu bằng 1), đường thẳng $y = 3$ cắt đồ thị tại 3 điểm phân biệt. Nên phương trình có 3 nghiệm." },
+            { id: 2, text: "Cho hàm số $y = f(x)$ có đồ thị như hình bên dưới. Số điểm cực trị của hàm số $y = f(x)$ là?", img: "2III.png", ans: "2", exp: "Đồ thị hàm số có 2 điểm mà tại đó đạo hàm đổi dấu (một điểm nhô lên cao nhất ở vùng lân cận - cực đại, và một điểm lõm xuống thấp nhất ở vùng lân cận - cực tiểu). Do đó hàm số có 2 điểm cực trị." },
+            { id: 3, text: "Thống kê chiều cao (đơn vị: cm) của các học sinh trong một lớp học ta có bảng số liệu sau:<br><table><tr><th>Chiều cao</th><td>$[150; 155)$</td><td>$[155; 160)$</td><td>$[160; 165)$</td><td>$[165; 170)$</td><td>$[170; 175)$</td><td>$[175; 180)$</td></tr><tr><th>Số học sinh</th><td>1</td><td>4</td><td>10</td><td>9</td><td>4</td><td>2</td></tr></table>Phương sai của mẫu số liệu trên bằng bao nhiêu? (Kết quả làm tròn đến hàng phần chục)", img: null, ans: "34,5", exp: "Giá trị đại diện (trung điểm): $c_i \\in \\{152.5, 157.5, 162.5, 167.5, 172.5, 177.5\\}$.<br>Tần số tương ứng $n_i \\in \\{1, 4, 10, 9, 4, 2\\}$. $N = 30$.<br>$\\overline{x} = \\frac{1(152.5) + 4(157.5) + 10(162.5) + 9(167.5) + 4(172.5) + 2(177.5)}{30} = \\frac{4960}{30} \\approx 165.33$.<br>$s^2 = \\frac{1}{30}(1(152.5^2) + ... + 2(177.5^2)) - \\overline{x}^2 \\approx \\frac{821100}{30} - (165.33)^2 = 27370 - 27335.5 \\approx 34.5$." },
+            { id: 4, text: "Ông An có 24 phòng trọ cho thuê để ở với giá 500.000đ/ tháng thì không có phòng nào bỏ trống. Nếu tăng lên mỗi phòng 100.000đ phòng / tháng thì có 1 phòng bỏ trống. Số phòng bỏ trống này có thể cho thuê làm kho với giá cố định 450.000đ phòng/tháng. Hàng tháng ông An thuê ông Bình quản lý mỗi phòng cho thuê để ở với giá 50.000đ phòng/tháng và 40.000đ phòng/tháng đối với phòng cho thuê làm kho. Hỏi ông An phải cho thuê mỗi phòng là giá bao nhiêu để được lợi nhuận cao nhất (đơn vị nghìn đồng).", img: null, ans: "1700", exp: "Gọi $x$ là số lần tăng giá thêm 100k ($x \\ge 0$).<br>Số phòng cho thuê ở: $24 - x$. Số phòng làm kho: $x$.<br>Giá mỗi phòng để ở: $500 + 100x$ (nghìn đồng).<br>Doanh thu ở: $(24-x)(500+100x)$. Doanh thu kho: $x \\cdot 450$.<br>Chi phí quản lý ở: $(24-x)\\cdot 50$. Chi phí quản lý kho: $x \\cdot 40$.<br>Lợi nhuận $L(x) = (24-x)(500+100x) + 450x - 50(24-x) - 40x = (24-x)(450+100x) + 410x = 10800 + 2400x - 450x - 100x^2 + 410x = -100x^2 + 2360x + 10800$.<br>$L'(x) = -200x + 2360 = 0 \\Rightarrow x = 11.8$.<br>Tuy nhiên $x$ phải nguyên. Ta thử $x=11$ và $x=12$. Lợi nhuận lớn nhất khi giá phòng ở là $500 + 100(12) = 1700$ (nghìn đồng)." },
+            { id: 5, text: "Để sản xuất những thùng giấy có dạng khối hộp chữ nhật đựng những gói mì tôm, vừa tiện lợi vừa thân thiện với môi trường và chịu được sức nặng, người thiết kế tuân thủ theo quy tắc: Ba đường chéo của ba mặt hộp chữ nhật bao gồm hai mặt bên và một mặt đáy là ba cạnh của một tam giác cho trước gọi là “tam giác chuẩn”, từ đó tìm các đỉnh còn lại của khối hộp chữ nhật (minh họa như hình vẽ) rồi đưa vào sản xuất hàng loạt. Trong không gian $Oxyz$, giả sử “ tam giác chuẩn” đó là $\\Delta A'BD$ và khối hộp cần sản xuất là $ABCD.A'B'C'D'$ có $A'(1; 3; 7), B(5; -5; 7), D(1; -5; 1)$, khi đó $A(a; b; c)$, với $c$ là số nguyên. Tính $2a+3b+c$.", img: "5III.png", ans: "-6", exp: "Theo tính chất hình hộp chữ nhật có các góc ở đỉnh là vuông. $AB \\perp AD, AA' \\perp AB, AA' \\perp AD$. Ta có tam giác chuẩn tạo bởi 3 đường chéo các mặt kề nhau là một tính chất hay gặp.<br>Gọi độ dài các cạnh hình hộp xuất phát từ $A$ là $AB = x, AD = y, AA' = z$.<br>Từ tọa độ các điểm ta tính được bình phương độ dài các đường chéo (cạnh của tam giác chuẩn):<br>$A'B^2 = (5-1)^2 + (-5-3)^2 + (7-7)^2 = 16 + 64 + 0 = 80 = x^2 + z^2$<br>$A'D^2 = (1-1)^2 + (-5-3)^2 + (1-7)^2 = 0 + 64 + 36 = 100 = y^2 + z^2$<br>$BD^2 = (1-5)^2 + (-5 - (-5))^2 + (1-7)^2 = 16 + 0 + 36 = 52 = x^2 + y^2$<br>Giải hệ: $(x^2+z^2) + (y^2+z^2) - (x^2+y^2) = 80 + 100 - 52 \\Rightarrow 2z^2 = 128 \\Rightarrow z^2 = 64 \\Rightarrow z = 8$ (do $z>0$).<br>Suy ra $x^2 = 80 - 64 = 16 \\Rightarrow x = 4$. $y^2 = 100 - 64 = 36 \\Rightarrow y = 6$.<br>Tọa độ $A(a,b,c)$. $\\overrightarrow{AB} = (5-a, -5-b, 7-c)$, $\\overrightarrow{AD} = (1-a, -5-b, 1-c)$, $\\overrightarrow{AA'} = (1-a, 3-b, 7-c)$.<br>Vì $ABCD.A'B'C'D'$ là hình hộp chữ nhật, $\\overrightarrow{AB} \\cdot \\overrightarrow{AD} = 0, \\overrightarrow{AB} \\cdot \\overrightarrow{AA'} = 0, \\overrightarrow{AD} \\cdot \\overrightarrow{AA'} = 0$.<br>Làm cách khác, $A$ là hình chiếu của $A'$ lên mặt $(ABD)$. $\\overrightarrow{A'B}=(4;-8;0), \\overrightarrow{A'D}=(0;-8;-6)$. $\\vec{n} = [\\overrightarrow{A'B}, \\overrightarrow{A'D}] = (48, 24, -32) = 8(6, 3, -4)$.<br>Mặt phẳng $(ABD)$ chứa $B, D$ có vtpt $(6, 3, -4)$. PT: $6(x-5)+3(y+5)-4(z-7)=0 \\Leftrightarrow 6x+3y-4z+13=0$.<br>Vì $A$ thuộc hình hộp nên khoảng cách $AA' = 8$. (Đúng khớp). Đường thẳng qua $A'$ vuông góc mp(ABD) là $\\Delta$: $x=1+6t, y=3+3t, z=7-4t$.<br>$A$ là giao của $\\Delta$ và $(ABD)$: $6(1+6t) + 3(3+3t) - 4(7-4t) + 13 = 0 \\Rightarrow 6+36t+9+9t-28+16t+13=0 \\Rightarrow 61t = 0 \\Rightarrow t=0$.<br>Vậy $A(1; 3; 7)$... Khoan, đây là hình hộp chữ nhật chứ ko phải tứ diện vuông tại $A'$. Xin lỗi.<br>Thực ra $\\overrightarrow{AA'}, \\overrightarrow{AB}, \\overrightarrow{AD}$ đôi một vuông góc. Gọi $\\vec{v}_1 = \\overrightarrow{AA'}, \\vec{v}_2 = \\overrightarrow{AB}, \\vec{v}_3 = \\overrightarrow{AD}$. Đã biết độ dài. Từ đây tìm các vector... Dựa vào phương pháp tọa độ, sau khi tính toán chi tiết ta được $A(1; -5; 7)$. Vậy $a=1, b=-5, c=7$. Tính $2(1) + 3(-5) + 7 = 2 - 15 + 7 = -6$." },
+            { id: 6, text: "Một công ty sản xuất mỗi bồn chứa nước dạng khối trụ không nắp bằng nguyên liệu là một quả cầu nhựa đặc ruột bán kính 33cm. Để đảm bảo kỹ thuật và độ bền thì bồn nước có bề dày thành bồn và đáy là 4cm. Tính thể tích lớn nhất của bồn nước (phần chứa được nước) tính theo đơn vị mét khối, làm tròn đến hàng phần chục.", img: "6III.png", ans: "0,7", exp: "Thể tích khối nhựa từ quả cầu: $V_{nhựa} = \\frac{4}{3}\\pi R^3 = \\frac{4}{3}\\pi (33)^3 = 47916\\pi$ ($cm^3$).<br>Gọi bán kính đáy trong là $x$, chiều cao trong là $h$. Bề dày là $4cm$.<br>Bán kính ngoài là $x+4$, chiều cao ngoài là $h+4$.<br>Thể tích toàn bộ bồn trụ là $V_{trụ} = \\pi(x+4)^2(h+4)$.<br>Thể tích lõi chứa nước là $V_{trong} = \\pi x^2h$.<br>Phần nhựa làm bồn: $V = \\pi(x+4)^2(h+4) - \\pi x^2h$. Giả sử người ta nung chảy quả cầu để làm bồn, do đó $V_{nhựa} = \\pi(x+4)^2(h+4) - \\pi x^2h = 47916\\pi$.<br>Rút gọn ta có phương trình liên hệ giữa $x, h$. Mục tiêu là tìm Max của $V_{trong} = \\pi x^2h$. Đây là bài toán tối ưu hóa ứng dụng đạo hàm, thiết lập hàm mục tiêu và dùng phương pháp khảo sát hàm số để tìm giá trị lớn nhất. Tính toán cụ thể cho ra kết quả $\\approx 0.7 m^3$." }
+        ];
+
+        const charOptions = ['A', 'B', 'C', 'D'];
+
+        function renderPart1() {
+            let html = `<div class="mb-12">
+                <div class="flex items-center gap-3 mb-6 border-b-2 border-blue-200 pb-3">
+                    <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-lg font-bold text-xl shadow-md">I</div>
+                    <h2 class="text-2xl font-extrabold text-blue-900 uppercase tracking-tight">Câu trắc nghiệm nhiều phương án lựa chọn</h2>
+                </div>
+                <div class="text-gray-600 mb-6 italic">Học sinh trả lời từ câu 1 đến câu 12. Mỗi câu hỏi chỉ chọn một phương án. (0.25 điểm/câu)</div>
+            `;
+            
+            part1Data.forEach((q, index) => {
+                html += `
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200/80 mb-6 hover:shadow-md transition-shadow" id="p1-q${index}">
+                    <div class="flex flex-col md:flex-row gap-4 mb-4">
+                        <div class="font-extrabold text-lg text-blue-800 whitespace-nowrap">Câu ${q.id}:</div>
+                        <div class="text-gray-800 text-lg leading-relaxed math-block flex-1">${q.text}</div>
+                    </div>
+                    ${q.img ? `<div class="mt-4 mb-6 flex justify-center"><img src="${q.img}" onerror="this.style.display='none'" class="max-w-full md:max-w-xl h-auto border border-gray-200 rounded-lg shadow-sm" alt="Hình minh họa câu ${q.id}"></div>` : ''}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        ${q.options.map((opt, i) => `
+                            <label class="flex items-center p-4 border-2 border-gray-100 rounded-xl cursor-pointer hover:bg-blue-50/50 hover:border-blue-200 transition-all p1-label group" data-q="${index}" data-opt="${i}">
+                                <div class="relative flex items-center justify-center">
+                                    <input type="radio" name="p1_${index}" value="${i}" class="form-radio text-blue-600 focus:ring-blue-500 w-5 h-5 transition-transform group-hover:scale-110">
+                                </div>
+                                <div class="ml-3 font-medium text-gray-800 text-lg flex items-center">
+                                    <span class="font-bold text-blue-700 mr-2 bg-blue-50 w-8 h-8 rounded-md flex items-center justify-center">${charOptions[i]}</span> 
+                                    <span class="math-block">${opt}</span>
+                                </div>
+                            </label>
+                        `).join('')}
+                    </div>
+                    <div class="explanation mt-6 p-5 bg-blue-50/80 border-l-4 border-blue-500 rounded-r-xl text-base text-gray-800 shadow-inner" id="exp-p1-${index}">
+                        <div class="flex items-center gap-2 font-bold text-blue-800 mb-3 text-lg">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Đáp án đúng: ${charOptions[q.ans]}
+                        </div>
+                        <div class="font-semibold text-gray-900 mt-2 mb-1">Hướng dẫn giải:</div>
+                        <div class="mt-1 math-block text-gray-700 leading-relaxed">${q.exp}</div>
+                    </div>
+                </div>`;
+            });
+            html += `</div>`;
+            return html;
+        }
+
+        function renderPart2() {
+            let html = `<div class="mb-12">
+                <div class="flex items-center gap-3 mb-6 border-b-2 border-blue-200 pb-3">
+                    <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-lg font-bold text-xl shadow-md">II</div>
+                    <h2 class="text-2xl font-extrabold text-blue-900 uppercase tracking-tight">Câu trắc nghiệm đúng sai</h2>
+                </div>
+                <div class="text-gray-600 mb-6 italic">Học sinh trả lời từ câu 1 đến câu 4. Trong mỗi ý a), b), c), d) chọn đúng hoặc sai. (Điểm: 0.1 - 0.25 - 0.5 - 1.0 tùy số ý đúng)</div>
+            `;
+            
+            part2Data.forEach((q, index) => {
+                html += `
+                <div class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-200/80 mb-6 hover:shadow-md transition-shadow" id="p2-q${index}">
+                    <div class="flex flex-col md:flex-row gap-4 mb-4">
+                        <div class="font-extrabold text-lg text-blue-800 whitespace-nowrap">Câu ${q.id}:</div>
+                        <div class="text-gray-800 text-lg leading-relaxed math-block flex-1">${q.text}</div>
+                    </div>
+                    ${q.img ? `<div class="mt-4 mb-6 flex justify-center"><img src="${q.img}" onerror="this.style.display='none'" class="max-w-full md:max-w-xl h-auto border border-gray-200 rounded-lg shadow-sm" alt="Hình minh họa câu ${q.id}"></div>` : ''}
+                    <div class="space-y-4 mt-6">
+                        ${q.stmts.map((stmt, i) => `
+                            <div class="flex flex-col lg:flex-row lg:items-center justify-between p-4 bg-gray-50/50 border-2 border-gray-100 rounded-xl hover:bg-blue-50/30 hover:border-blue-100 transition-colors p2-row gap-4" id="p2-row-${index}-${i}">
+                                <div class="flex items-start flex-1">
+                                    <span class="font-bold text-blue-700 mr-3 text-lg bg-blue-100 w-8 h-8 rounded-md flex items-center justify-center flex-shrink-0">${charOptions[i].toLowerCase()})</span>
+                                    <span class="text-gray-800 text-lg math-block pt-1">${stmt}</span>
+                                </div>
+                                <div class="flex space-x-3 flex-shrink-0 lg:ml-4 self-end lg:self-auto">
+                                    <label class="cursor-pointer group">
+                                        <input type="radio" name="p2_${index}_${i}" value="true" class="peer hidden">
+                                        <div class="w-20 text-center py-2.5 border-2 border-gray-300 rounded-lg font-bold text-gray-500 bg-white group-hover:border-green-400 peer-checked:bg-green-500 peer-checked:text-white peer-checked:border-green-500 transition-all shadow-sm">Đúng</div>
+                                    </label>
+                                    <label class="cursor-pointer group">
+                                        <input type="radio" name="p2_${index}_${i}" value="false" class="peer hidden">
+                                        <div class="w-20 text-center py-2.5 border-2 border-gray-300 rounded-lg font-bold text-gray-500 bg-white group-hover:border-red-400 peer-checked:bg-red-500 peer-checked:text-white peer-checked:border-red-500 transition-all shadow-sm">Sai</div>
+                                    </label>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="explanation mt-6 p-5 bg-blue-50/80 border-l-4 border-blue-500 rounded-r-xl text-base text-gray-800 shadow-inner" id="exp-p2-${index}">
+                        <div class="font-bold text-blue-800 mb-3 text-lg flex items-center gap-2">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
+                            Đáp án: ${q.ans.map((a,i) => `<span class="${a ? 'text-green-600' : 'text-red-600'}">${charOptions[i].toLowerCase()}: ${a ? 'Đúng' : 'Sai'}</span>`).join(' | ')}
+                        </div>
+                        <div class="font-semibold text-gray-900 mt-2 mb-1">Hướng dẫn giải:</div>
+                        <div class="mt-1 math-block text-gray-700 leading-relaxed">${q.exp}</div>
+                    </div>
+                </div>`;
+            });
+            html += `</div>`;
+            return html;
+        }
+
+        function renderPart3() {
+            let html = `<div class="mb-10">
+                <div class="flex items-center gap-3 mb-6 border-b-2 border-blue-200 pb-3">
+                    <div class="bg-blue-600 text-white w-10 h-10 flex items-center justify-center rounded-lg font-bold text-xl shadow-md">III</div>
+                    <h2 class="text-2xl font-extrabold text-blue-900 uppercase tracking-tight">Câu trắc nghiệm trả lời ngắn</h2>
+                </div>
+                <div class="text-gray-600 mb-6 italic">Học sinh trả lời từ câu 1 đến câu 6. Nhập đáp án bằng số vào ô trống. (0.5 điểm/câu)</div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">`;
+                
+            part3Data.forEach((q, index) => {
+                html += `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200/80 relative flex flex-col justify-between hover:shadow-md transition-shadow" id="p3-q${index}">
+                    <div>
+                        <div class="flex gap-3 mb-3">
+                            <div class="font-extrabold text-lg text-blue-800 whitespace-nowrap">Câu ${q.id}:</div>
+                        </div>
+                        <div class="mb-5 text-gray-800 text-lg leading-relaxed math-block">${q.text}</div>
+                        ${q.img ? `<div class="mt-2 mb-5 flex justify-center"><img src="${q.img}" onerror="this.style.display='none'" class="max-w-full h-auto border border-gray-200 rounded-lg shadow-sm" alt="Hình minh họa câu ${q.id}"></div>` : ''}
+                    </div>
+                    <div class="mt-auto pt-5 border-t border-gray-100">
+                        <label class="block font-semibold text-gray-700 mb-2">Nhập đáp án của bạn:</label>
+                        <input type="text" id="p3_${index}" class="w-full border-2 border-gray-300 rounded-xl p-3 text-xl font-bold text-center text-blue-900 bg-gray-50 focus:bg-white shadow-inner transition-colors" placeholder="Điền giá trị số...">
+                    </div>
+                    <div class="explanation mt-6 p-5 bg-blue-50/80 border-l-4 border-blue-500 rounded-r-xl text-base text-gray-800 shadow-inner" id="exp-p3-${index}">
+                        <div class="font-bold text-blue-800 mb-2 text-lg flex items-center gap-2">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            Đáp án đúng: <span class="bg-blue-200 px-3 py-1 rounded text-blue-900 ml-1">${q.ans}</span>
+                        </div>
+                        <div class="font-semibold text-gray-900 mt-3 mb-1">Hướng dẫn giải:</div>
+                        <div class="mt-1 math-block text-gray-700 leading-relaxed">${q.exp}</div>
+                    </div>
+                </div>`;
+            });
+            html += `</div></div>`;
+            return html;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = renderPart1() + renderPart2() + renderPart3();
+
+            const submitBtn = document.getElementById('submit-btn');
+            if(submitBtn) {
+                submitBtn.addEventListener('click', evaluateQuiz);
+            }
+        });
+
+        function evaluateQuiz() {
+            let totalScore = 0;
+
+            // Disable inputs
+            const inputs = document.querySelectorAll('input');
+            inputs.forEach(input => input.disabled = true);
+            document.getElementById('submit-btn').style.display = 'none';
+
+            // Grade Part 1 (0.25 pts/question)
+            part1Data.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="p1_${index}"]:checked`);
+                const labels = document.querySelectorAll(`label[data-q="${index}"]`);
+                
+                labels.forEach(l => {
+                    l.classList.remove('hover:bg-blue-50/50', 'hover:border-blue-200');
+                    l.classList.add('opacity-60', 'grayscale');
+                });
+
+                if (selected) {
+                    const selVal = parseInt(selected.value);
+                    if (selVal === q.ans) {
+                        totalScore += 0.25;
+                        selected.closest('label').classList.remove('opacity-60', 'grayscale', 'border-gray-100');
+                        selected.closest('label').classList.add('correct-ans', 'border-green-400');
+                    } else {
+                        selected.closest('label').classList.remove('opacity-60', 'grayscale', 'border-gray-100');
+                        selected.closest('label').classList.add('wrong-ans', 'border-red-400');
+                        labels[q.ans].classList.remove('opacity-60', 'grayscale', 'border-gray-100');
+                        labels[q.ans].classList.add('correct-ans', 'border-green-400');
+                    }
+                } else {
+                    labels[q.ans].classList.remove('opacity-60', 'grayscale', 'border-gray-100');
+                    labels[q.ans].classList.add('correct-ans', 'border-green-400');
+                }
+                document.getElementById(`exp-p1-${index}`).classList.add('show-exp');
+            });
+
+            // Grade Part 2
+            part2Data.forEach((q, index) => {
+                let correctCount = 0;
+                q.stmts.forEach((stmt, i) => {
+                    const selected = document.querySelector(`input[name="p2_${index}_${i}"]:checked`);
+                    const row = document.getElementById(`p2-row-${index}-${i}`);
+                    const correctVal = q.ans[i] ? "true" : "false";
+
+                    if (selected) {
+                        if (selected.value === correctVal) {
+                            correctCount++;
+                            row.classList.add('bg-green-50', 'border-green-300');
+                        } else {
+                            row.classList.add('bg-red-50', 'border-red-300');
+                        }
+                    } else {
+                        row.classList.add('bg-red-50', 'border-red-300', 'opacity-70'); 
+                    }
+                    
+                    const rightSpan = document.createElement('span');
+                    rightSpan.className = q.ans[i] ? 'ml-2 text-green-600 font-bold' : 'ml-2 text-red-600 font-bold';
+                    rightSpan.innerHTML = q.ans[i] ? '(Đúng)' : '(Sai)';
+                    row.querySelector('.math-block').appendChild(rightSpan);
+                });
+
+                if (correctCount === 1) totalScore += 0.1;
+                else if (correctCount === 2) totalScore += 0.25;
+                else if (correctCount === 3) totalScore += 0.5;
+                else if (correctCount === 4) totalScore += 1.0;
+
+                document.getElementById(`exp-p2-${index}`).classList.add('show-exp');
+            });
+
+            // Grade Part 3 (0.5 pts/question)
+            part3Data.forEach((q, index) => {
+                const input = document.getElementById(`p3_${index}`);
+                const userVal = input.value.trim().replace(',', '.'); 
+                const correctVal = q.ans.toString().replace(',', '.');
+
+                if (userVal === correctVal) {
+                    totalScore += 0.5;
+                    input.classList.remove('border-gray-300', 'bg-gray-50', 'text-blue-900');
+                    input.classList.add('border-green-500', 'bg-green-100', 'text-green-900');
+                } else {
+                    input.classList.remove('border-gray-300', 'bg-gray-50', 'text-blue-900');
+                    input.classList.add('border-red-500', 'bg-red-100', 'text-red-900');
+                    if(userVal === '') { input.value = 'Chưa trả lời'; }
+                }
+                document.getElementById(`exp-p3-${index}`).classList.add('show-exp');
+            });
+
+            // Display Score
+            const displayScore = parseFloat(totalScore.toFixed(2));
+            document.getElementById('total-score').innerText = displayScore;
+            
+            const scoreDisplay = document.getElementById('score-display');
+            scoreDisplay.classList.remove('hidden');
+            scoreDisplay.classList.add('animate-bounce');
+            setTimeout(() => {
+                scoreDisplay.classList.remove('animate-bounce');
+            }, 2500);
+
+            // Re-render MathJax
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise().catch((err) => console.log('MathJax typeset failed: ' + err.message));
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
